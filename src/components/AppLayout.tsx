@@ -8,6 +8,7 @@ import ProductCard from './ProductCard';
 import ArticleCard from './ArticleCard';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { articles } from '@/data/articles';
+import { withPriorityProducts } from '@/lib/priority-products';
 import { ArrowRight, ChevronLeft, ChevronRight, TrendingUp } from 'lucide-react';
 
 interface HomeArticleCarouselSectionProps {
@@ -91,7 +92,7 @@ const AppLayout: React.FC = () => {
         supabase.from('ecom_products').select('*, variants:ecom_product_variants(*)').eq('status', 'active').order('created_at', { ascending: false }),
         supabase.from('ecom_collections').select('*').eq('is_visible', true).order('title'),
       ]);
-      if (productsRes.data) setProducts(productsRes.data);
+      setProducts(withPriorityProducts(productsRes.data || []));
       if (collectionsRes.data) setCollections(collectionsRes.data);
       setLoading(false);
     };

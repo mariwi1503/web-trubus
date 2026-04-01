@@ -8,6 +8,7 @@ import AuthModal from '@/components/AuthModal';
 import ProductCard from '@/components/ProductCard';
 import ArticleCard from '@/components/ArticleCard';
 import { articles } from '@/data/articles';
+import { withPriorityProducts } from '@/lib/priority-products';
 import { ChevronRight, Search } from 'lucide-react';
 
 export default function SearchPage() {
@@ -24,7 +25,9 @@ export default function SearchPage() {
         .select('*, variants:ecom_product_variants(*)')
         .eq('status', 'active')
         .ilike('name', `%${query}%`);
-      if (data) setProducts(data);
+      setProducts(withPriorityProducts(data || []).filter(product =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      ));
       setLoading(false);
     };
     if (query) fetchProducts();

@@ -5,6 +5,7 @@ import TopBanner from '@/components/TopBanner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
+import { withPriorityProducts } from '@/lib/priority-products';
 import { Search, SlidersHorizontal, ChevronRight } from 'lucide-react';
 
 export default function ProductListPage() {
@@ -21,7 +22,7 @@ export default function ProductListPage() {
         supabase.from('ecom_products').select('*, variants:ecom_product_variants(*)').eq('status', 'active'),
         supabase.from('ecom_collections').select('*').eq('is_visible', true).order('title'),
       ]);
-      if (pRes.data) setProducts(pRes.data);
+      setProducts(withPriorityProducts(pRes.data || []));
       if (cRes.data) setCollections(cRes.data);
       setLoading(false);
     };

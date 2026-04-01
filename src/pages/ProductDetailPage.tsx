@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { getProductCtaLinks } from '@/lib/product-links';
+import { getPriorityProductByHandle, getRelatedPriorityProducts, withPriorityProducts } from '@/lib/priority-products';
 import { ChevronRight, ExternalLink, Truck, Shield, Package } from 'lucide-react';
 
 export default function ProductDetailPage() {
@@ -28,19 +29,23 @@ export default function ProductDetailPage() {
         .eq('handle', handle)
         .single();
 
-      if (data) {
-        let variants = data.variants || [];
-        if (data.has_variants && variants.length === 0) {
+      const fallbackProduct = getPriorityProductByHandle(handle);
+      const resolvedProduct = data || fallbackProduct;
+
+      if (resolvedProduct) {
+        const currentProduct = { ...resolvedProduct };
+        let variants = data?.variants || currentProduct.variants || [];
+        if (data?.has_variants && variants.length === 0) {
           const { data: variantData } = await supabase
             .from('ecom_product_variants')
             .select('*')
             .eq('product_id', data.id)
             .order('position');
           variants = variantData || [];
-          data.variants = variants;
+          currentProduct.variants = variants;
         }
 
-        setProduct(data);
+        setProduct(currentProduct);
 
         if (variants.length > 0) {
           const sorted = [...variants].sort((a: any, b: any) => (a.position || 0) - (b.position || 0));
@@ -53,11 +58,24 @@ export default function ProductDetailPage() {
         const { data: related } = await supabase
           .from('ecom_products')
           .select('*, variants:ecom_product_variants(*)')
-          .eq('product_type', data.product_type)
-          .neq('id', data.id)
+          .eq('product_type', currentProduct.product_type)
+          .neq('id', data?.id || '')
           .eq('status', 'active')
           .limit(4);
-        if (related) setRelatedProducts(related);
+
+        const mergedRelatedProducts = withPriorityProducts(related || [])
+          .filter((relatedProduct: any) => relatedProduct.handle !== currentProduct.handle)
+          .filter((relatedProduct: any) => relatedProduct.product_type === currentProduct.product_type)
+          .slice(0, 4);
+
+        if (mergedRelatedProducts.length > 0) {
+          setRelatedProducts(mergedRelatedProducts);
+        } else {
+          setRelatedProducts(getRelatedPriorityProducts(currentProduct.handle, currentProduct.product_type, 4));
+        }
+      } else {
+        setProduct(null);
+        setRelatedProducts([]);
       }
       setLoading(false);
     };
