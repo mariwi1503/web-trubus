@@ -3,11 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import TopBanner from '@/components/TopBanner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import AuthModal from '@/components/AuthModal';
 import ArticleCard from '@/components/ArticleCard';
 import { articles } from '@/data/articles';
 import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/contexts/AuthContext';
 import { ChevronRight, Clock, User, Calendar, Share2, Facebook, Twitter, MessageCircle, Reply, Send, ChevronDown, ChevronUp, CornerDownRight } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -61,12 +59,10 @@ function avatarColor(name: string): string {
 }
 
 // ─── Single Comment Component ────────────────────────────────────────────────
-function CommentItem({ comment, depth, onReplySubmit, isAuthenticated, onLoginPrompt }: {
+function CommentItem({ comment, depth, onReplySubmit }: {
   comment: Comment;
   depth: number;
   onReplySubmit: (parentId: string, text: string) => Promise<void>;
-  isAuthenticated: boolean;
-  onLoginPrompt: () => void;
 }) {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [replyText, setReplyText] = useState('');
@@ -104,7 +100,6 @@ function CommentItem({ comment, depth, onReplySubmit, isAuthenticated, onLoginPr
             <div className="flex items-center gap-3 mt-2">
               <button
                 onClick={() => {
-                  if (!isAuthenticated) { onLoginPrompt(); return; }
                   setShowReplyForm(!showReplyForm);
                 }}
                 className="flex items-center gap-1 text-xs text-gray-400 hover:text-green-700 transition-colors"
@@ -162,8 +157,6 @@ function CommentItem({ comment, depth, onReplySubmit, isAuthenticated, onLoginPr
               comment={reply}
               depth={Math.min(depth + 1, maxDepth)}
               onReplySubmit={onReplySubmit}
-              isAuthenticated={isAuthenticated}
-              onLoginPrompt={onLoginPrompt}
             />
           ))}
         </div>
@@ -174,9 +167,10 @@ function CommentItem({ comment, depth, onReplySubmit, isAuthenticated, onLoginPr
 
 // ─── Comments Section ────────────────────────────────────────────────────────
 function CommentsSection({ slug }: { slug: string }) {
-  const { user, isAuthenticated, setShowAuthModal } = useAuth();
   const [comments, setComments] = useState<Comment[]>([]);
   const [tree, setTree] = useState<Comment[]>([]);
+  const [commenterName, setCommenterName] = useState('');
+  const [commenterEmail, setCommenterEmail] = useState('');
   const [newComment, setNewComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -205,13 +199,13 @@ function CommentsSection({ slug }: { slug: string }) {
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newComment.trim() || !isAuthenticated || !user) return;
+    if (!newComment.trim() || !commenterName.trim() || !commenterEmail.trim()) return;
     setSubmitting(true);
     const { error } = await supabase.from('article_comments').insert({
       article_slug: slug,
       parent_id: null,
-      user_name: user.name,
-      user_email: user.email,
+      user_name: commenterName.trim(),
+      user_email: commenterEmail.trim(),
       comment_text: newComment.trim(),
     });
     if (!error) {
@@ -222,12 +216,12 @@ function CommentsSection({ slug }: { slug: string }) {
   };
 
   const handleReplySubmit = async (parentId: string, text: string) => {
-    if (!user) return;
+    if (!commenterName.trim() || !commenterEmail.trim()) return;
     await supabase.from('article_comments').insert({
       article_slug: slug,
       parent_id: parentId,
-      user_name: user.name,
-      user_email: user.email,
+      user_name: commenterName.trim(),
+      user_email: commenterEmail.trim(),
       comment_text: text,
     });
     await fetchComments();
@@ -260,46 +254,42 @@ function CommentsSection({ slug }: { slug: string }) {
         </div>
 
         {/* New comment form */}
-        {isAuthenticated && user ? (
-          <form onSubmit={handleSubmitComment} className="mb-6">
-            <div className="flex items-start gap-3">
-              <div className={`w-9 h-9 rounded-full ${avatarColor(user.name)} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
-                {user.name.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-700 mb-1.5">Komentar sebagai <span className="text-green-700">{user.name}</span></p>
-                <textarea
-                  value={newComment}
-                  onChange={e => setNewComment(e.target.value)}
-                  placeholder="Tulis komentar Anda..."
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none placeholder-gray-400"
-                />
-                <div className="flex justify-end mt-2">
-                  <button
-                    type="submit"
-                    disabled={submitting || !newComment.trim()}
-                    className="px-5 py-2 bg-green-700 text-white rounded-lg text-sm font-semibold hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
-                  >
-                    <Send className="w-4 h-4" />
-                    {submitting ? 'Mengirim...' : 'Kirim Komentar'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        ) : (
-          <div className="mb-6 bg-gray-50 rounded-xl p-5 text-center">
-            <MessageCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-            <p className="text-sm text-gray-500 mb-3">Masuk untuk meninggalkan komentar</p>
+        <form onSubmit={handleSubmitComment} className="mb-6 space-y-4">
+          <div className="grid gap-3 md:grid-cols-2">
+            <input
+              type="text"
+              value={commenterName}
+              onChange={e => setCommenterName(e.target.value)}
+              placeholder="Nama"
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+            <input
+              type="email"
+              value={commenterEmail}
+              onChange={e => setCommenterEmail(e.target.value)}
+              placeholder="Email"
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+          <textarea
+            value={newComment}
+            onChange={e => setNewComment(e.target.value)}
+            placeholder="Tulis komentar Anda..."
+            rows={3}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none placeholder-gray-400"
+          />
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-gray-400">Nama dan email yang sama juga dipakai saat Anda membalas komentar.</p>
             <button
-              onClick={() => setShowAuthModal(true)}
-              className="px-5 py-2 bg-green-700 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors"
+              type="submit"
+              disabled={submitting || !newComment.trim() || !commenterName.trim() || !commenterEmail.trim()}
+              className="px-5 py-2 bg-green-700 text-white rounded-lg text-sm font-semibold hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
             >
-              Masuk / Daftar
+              <Send className="w-4 h-4" />
+              {submitting ? 'Mengirim...' : 'Kirim Komentar'}
             </button>
           </div>
-        )}
+        </form>
 
         {/* Comments list */}
         {loading ? (
@@ -328,8 +318,6 @@ function CommentsSection({ slug }: { slug: string }) {
                 comment={comment}
                 depth={0}
                 onReplySubmit={handleReplySubmit}
-                isAuthenticated={isAuthenticated}
-                onLoginPrompt={() => setShowAuthModal(true)}
               />
             ))}
           </div>
@@ -348,7 +336,7 @@ export default function ArticleDetailPage() {
   if (!article) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <TopBanner /><Navbar /><AuthModal />
+        <TopBanner /><Navbar />
         <div className="max-w-[1200px] mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold mb-2">Artikel Tidak Ditemukan</h1>
           <Link to="/artikel" className="text-green-700 hover:underline">Kembali ke daftar artikel</Link>
@@ -360,7 +348,7 @@ export default function ArticleDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopBanner /><Navbar /><AuthModal />
+      <TopBanner /><Navbar />
 
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">

@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 import TopBanner from '@/components/TopBanner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import AuthModal from '@/components/AuthModal';
 import ProductCard from '@/components/ProductCard';
 import { Search, SlidersHorizontal, ChevronRight } from 'lucide-react';
 
@@ -48,7 +47,6 @@ export default function ProductListPage() {
     <div className="min-h-screen bg-gray-50">
       <TopBanner />
       <Navbar />
-      <AuthModal />
 
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">

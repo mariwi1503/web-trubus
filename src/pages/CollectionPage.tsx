@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 import TopBanner from '@/components/TopBanner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import AuthModal from '@/components/AuthModal';
 import ProductCard from '@/components/ProductCard';
 import { ChevronRight, SlidersHorizontal } from 'lucide-react';
 
@@ -72,7 +71,6 @@ export default function CollectionPage() {
     <div className="min-h-screen bg-gray-50">
       <TopBanner />
       <Navbar />
-      <AuthModal />
 
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         {/* Breadcrumb */}

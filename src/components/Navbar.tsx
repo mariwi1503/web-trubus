@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { ShoppingCart, User, Search, Menu, X, ChevronDown } from 'lucide-react';
+import { Search, Menu, X, ChevronDown } from 'lucide-react';
 import { articleCategories } from '@/data/articles';
 
 interface Collection {
@@ -19,8 +17,6 @@ const Navbar: React.FC = () => {
   const [produkOpen, setProdukOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { cartCount } = useCart();
-  const { isAuthenticated, user, logout, setShowAuthModal } = useAuth();
   const navigate = useNavigate();
   const artikelRef = useRef<HTMLDivElement>(null);
   const produkRef = useRef<HTMLDivElement>(null);
@@ -136,7 +132,6 @@ const Navbar: React.FC = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            {/* Search */}
             <div className="relative">
               <button onClick={() => setSearchOpen(!searchOpen)} className="p-2 text-gray-600 hover:text-green-700">
                 <Search className="w-5 h-5" />
@@ -154,35 +149,6 @@ const Navbar: React.FC = () => {
                 </form>
               )}
             </div>
-
-            {/* Cart */}
-            <Link to="/keranjang" className="relative p-2 text-gray-600 hover:text-green-700">
-              <ShoppingCart className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-
-            {/* Auth */}
-            {isAuthenticated ? (
-              <div className="relative group">
-                <button className="flex items-center gap-1 p-2 text-gray-600 hover:text-green-700">
-                  <User className="w-5 h-5" />
-                  <span className="hidden md:inline text-sm">{user?.name}</span>
-                </button>
-                <div className="absolute right-0 top-full mt-1 bg-white shadow-xl rounded-lg border py-2 min-w-[150px] hidden group-hover:block z-50">
-                  <button onClick={logout} className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600">
-                    Keluar
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button onClick={() => setShowAuthModal(true)} className="p-2 text-gray-600 hover:text-green-700">
-                <User className="w-5 h-5" />
-              </button>
-            )}
           </div>
         </div>
       </div>

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '@/contexts/CartContext';
-import { ShoppingCart, Tag } from 'lucide-react';
-import { toast } from '@/components/ui/use-toast';
+import { ChevronRight, Tag } from 'lucide-react';
 
 interface ProductCardProps {
   product: any;
@@ -10,30 +8,12 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, compact }) => {
-  const { addToCart } = useCart();
-
   const price = product.variants?.length > 0
     ? Math.min(...product.variants.map((v: any) => v.price))
     : product.price;
 
   const formatPrice = (cents: number) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(cents);
-  };
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const variant = product.variants?.[0];
-    addToCart({
-      product_id: product.id,
-      variant_id: variant?.id || undefined,
-      name: product.name,
-      variant_title: variant?.title || undefined,
-      sku: variant?.sku || product.sku || product.handle,
-      price: variant?.price || product.price,
-      image: product.images?.[0],
-    });
-    toast({ title: 'Ditambahkan ke keranjang', description: product.name });
   };
 
   const inStock = product.has_variants
@@ -81,14 +61,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact }) => {
         </h3>
         <div className="flex items-center justify-between">
           <p className="text-base font-bold text-green-700">{formatPrice(price)}</p>
-          {inStock && (
-            <button
-              onClick={handleAddToCart}
-              className="p-1.5 rounded-full bg-green-50 text-green-700 hover:bg-green-700 hover:text-white transition-colors"
-            >
-              <ShoppingCart className="w-4 h-4" />
-            </button>
-          )}
+          <span className={`inline-flex items-center gap-1 text-xs font-semibold ${inStock ? 'text-green-700' : 'text-gray-400'}`}>
+            {inStock ? 'Lihat Detail' : 'Stok Habis'}
+            {inStock && <ChevronRight className="w-3.5 h-3.5" />}
+          </span>
         </div>
       </div>
     </Link>

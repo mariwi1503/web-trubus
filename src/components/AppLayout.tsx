@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 import TopBanner from './TopBanner';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import AuthModal from './AuthModal';
 import ProductCard from './ProductCard';
 import ArticleCard from './ArticleCard';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
@@ -29,7 +28,7 @@ const HomeArticleCarouselSection: React.FC<HomeArticleCarouselSectionProps> = ({
   const [api, setApi] = useState<CarouselApi>();
 
   useEffect(() => {
-    if (!api || !autoSlide || items.length <= 5) return;
+    if (!api || !autoSlide || items.length <= 2) return;
 
     const autoplay = window.setInterval(() => {
       const nextIndex = api.selectedScrollSnap() + slideStep;
@@ -64,11 +63,11 @@ const HomeArticleCarouselSection: React.FC<HomeArticleCarouselSectionProps> = ({
         }}
         className="w-full"
       >
-        <CarouselContent className="-ml-5">
+        <CarouselContent className="-ml-3 sm:-ml-5">
           {items.map(article => (
             <CarouselItem
               key={article.id}
-              className="pl-5 basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/5"
+              className="pl-3 basis-1/2 sm:pl-5 lg:basis-1/3 xl:basis-1/5"
             >
               <ArticleCard article={article} />
             </CarouselItem>
@@ -136,16 +135,22 @@ const AppLayout: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <TopBanner />
       <Navbar />
-      <AuthModal />
 
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         {/* Breaking News Ticker */}
-        <div className="bg-green-700 text-white rounded-lg px-4 py-2 mb-6 flex items-center gap-3 overflow-hidden">
+        <div className="mb-6 flex items-center gap-3 overflow-hidden rounded-lg bg-green-700 px-3 py-2 text-white sm:px-4">
           <span className="bg-white text-green-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase flex-shrink-0">Terkini</span>
-          <div className="overflow-hidden whitespace-nowrap">
-            <p className="text-sm animate-marquee inline-block">
-              Harga gabah naik 5% di awal musim panen 2026 &nbsp;&bull;&nbsp; Pemerintah luncurkan program subsidi pupuk baru &nbsp;&bull;&nbsp; Ekspor kopi Indonesia capai rekor tertinggi &nbsp;&bull;&nbsp; Varietas padi tahan kekeringan siap diluncurkan
-            </p>
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="ticker-track flex min-w-max items-center gap-8 whitespace-nowrap text-xs sm:text-sm">
+              <span>Harga gabah naik 5% di awal musim panen 2026</span>
+              <span>Pemerintah luncurkan program subsidi pupuk baru</span>
+              <span>Ekspor kopi Indonesia capai rekor tertinggi</span>
+              <span>Varietas padi tahan kekeringan siap diluncurkan</span>
+              <span aria-hidden="true">Harga gabah naik 5% di awal musim panen 2026</span>
+              <span aria-hidden="true">Pemerintah luncurkan program subsidi pupuk baru</span>
+              <span aria-hidden="true">Ekspor kopi Indonesia capai rekor tertinggi</span>
+              <span aria-hidden="true">Varietas padi tahan kekeringan siap diluncurkan</span>
+            </div>
           </div>
         </div>
 
@@ -317,11 +322,17 @@ const AppLayout: React.FC = () => {
 
       <style>{`
         @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
-        .animate-marquee {
+        .ticker-track {
           animation: marquee 20s linear infinite;
+          will-change: transform;
+        }
+        @media (max-width: 640px) {
+          .ticker-track {
+            animation-duration: 14s;
+          }
         }
       `}</style>
     </div>

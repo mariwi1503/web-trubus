@@ -4,27 +4,22 @@ import { supabase } from '@/lib/supabase';
 import TopBanner from '@/components/TopBanner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import AuthModal from '@/components/AuthModal';
 import ProductCard from '@/components/ProductCard';
-import { useCart } from '@/contexts/CartContext';
-import { toast } from '@/components/ui/use-toast';
-import { ChevronRight, Minus, Plus, ShoppingCart, Truck, Shield, Package } from 'lucide-react';
+import { getProductCtaLinks } from '@/lib/product-links';
+import { ChevronRight, ExternalLink, Truck, Shield, Package } from 'lucide-react';
 
 export default function ProductDetailPage() {
   const { handle } = useParams<{ handle: string }>();
   const [product, setProduct] = useState<any>(null);
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
   const [selectedSize, setSelectedSize] = useState('');
-  const [quantity, setQuantity] = useState(1);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
       setSelectedVariant(null);
       setSelectedSize('');
-      setQuantity(1);
       setLoading(true);
 
       const { data } = await supabase
@@ -94,30 +89,14 @@ export default function ProductDetailPage() {
   };
   const inStock = getInStock();
 
-  const handleAddToCart = () => {
-    if (!product) return;
-    if (hasVariants && !selectedSize) return;
-    if (!inStock) return;
-
-    addToCart({
-      product_id: product.id,
-      variant_id: selectedVariant?.id || undefined,
-      name: product.name,
-      variant_title: selectedVariant?.title || selectedSize || undefined,
-      sku: selectedVariant?.sku || product.sku || product.handle,
-      price: selectedVariant?.price || product.price,
-      image: product.images?.[0],
-    }, quantity);
-    toast({ title: 'Ditambahkan ke keranjang', description: `${product.name} x${quantity}` });
-  };
-
   const currentPrice = selectedVariant?.price || product?.price || 0;
+  const ctaLinks = product ? getProductCtaLinks(product) : [];
   const formatPrice = (cents: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(cents);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <TopBanner /><Navbar /><AuthModal />
+        <TopBanner /><Navbar />
         <div className="max-w-[1200px] mx-auto px-4 py-10">
           <div className="animate-pulse grid md:grid-cols-2 gap-8">
             <div className="aspect-square bg-gray-200 rounded-xl" />
@@ -132,7 +111,7 @@ export default function ProductDetailPage() {
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <TopBanner /><Navbar /><AuthModal />
+        <TopBanner /><Navbar />
         <div className="max-w-[1200px] mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Produk Tidak Ditemukan</h1>
           <Link to="/produk" className="text-green-700 hover:underline">Kembali ke katalog</Link>
@@ -144,7 +123,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopBanner /><Navbar /><AuthModal />
+      <TopBanner /><Navbar />
 
       <main className="max-w-[1200px] mx-auto px-4 py-6">
         <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
@@ -200,29 +179,42 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            {/* Quantity */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-800 mb-2">Jumlah</label>
-              <div className="flex items-center gap-3">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50">
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="text-lg font-semibold w-10 text-center">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50">
-                  <Plus className="w-4 h-4" />
-                </button>
-              </div>
+            <div className="mb-6 rounded-xl border border-green-100 bg-green-50 px-4 py-4">
+              <p className="text-sm font-semibold text-green-800">
+                {!inStock ? 'Produk sedang tidak tersedia.' : hasVariants && !selectedSize ? 'Pilih varian untuk melihat ketersediaan produk.' : 'Produk tersedia dan bisa dilihat detailnya lebih lanjut di katalog.'}
+              </p>
+              <p className="mt-1 text-sm text-green-700/90">
+                Jika produk ini cocok, lanjutkan lewat kanal resmi yang lebih aman seperti marketplace atau layanan Trubus.
+              </p>
             </div>
 
-            {/* Add to cart */}
-            <button
-              onClick={handleAddToCart}
-              disabled={(hasVariants && !selectedSize) || !inStock}
-              className="w-full py-3.5 bg-green-700 text-white rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              <ShoppingCart className="w-5 h-5" />
-              {!inStock ? 'Stok Habis' : hasVariants && !selectedSize ? 'Pilih Varian' : 'Tambah ke Keranjang'}
-            </button>
+            <div className="mb-6 space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-sm font-semibold text-gray-900">Lanjutkan ke kanal resmi</h2>
+                <span className="text-xs text-gray-400">Transaksi diarahkan ke platform eksternal</span>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {ctaLinks.map(link => (
+                  <a
+                    key={link.key}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
+                      link.kind === 'consultation'
+                        ? 'border border-green-200 bg-white text-green-800 hover:bg-green-50'
+                        : 'bg-green-700 text-white hover:bg-green-600'
+                    }`}
+                  >
+                    {link.label}
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+              <p className="text-xs leading-relaxed text-gray-500">
+                Tip: isi `tokopedia_url`, `shopee_url`, atau `halo_trubus_url` pada metadata produk bila ingin tiap tombol menuju link produk yang spesifik.
+              </p>
+            </div>
 
             {/* Features */}
             <div className="grid grid-cols-3 gap-3 mt-6">
