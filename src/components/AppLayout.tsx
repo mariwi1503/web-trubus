@@ -413,7 +413,7 @@ const AppLayout: React.FC = () => {
 
         <HomeArticleCarouselSection title="Artikel Terbaru" linkTo="/artikel" items={latestArticles} autoSlide slideStep={3} />
 
-        <HomeArticleCarouselSection title="Pilihan Editor" linkTo="/artikel" items={editorChoiceArticles} />
+        {/* <HomeArticleCarouselSection title="Pilihan Editor" linkTo="/artikel" items={editorChoiceArticles} /> */}
 
         {/* Products Section */}
         <section className="mb-16">

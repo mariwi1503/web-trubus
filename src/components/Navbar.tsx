@@ -83,7 +83,7 @@ const Navbar: React.FC<NavbarProps> = ({ transparentOnTop = false }) => {
             {/* Left side: Logo */}
             <Link to="/" className="flex items-center shrink-0">
               <img
-                src="/icons/logo-toko-trubus.png"
+                src="/icons/Logo-Trubus-putih.png"
                 alt="Toko Trubus"
                 className={`h-12 md:h-12 w-auto object-contain transition-all duration-300 ${isTransparent ? 'brightness-0 invert opacity-95' : ''}`}
               />
