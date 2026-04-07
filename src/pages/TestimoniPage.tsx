@@ -20,21 +20,21 @@ export default function TestimoniPage() {
     <div className="min-h-screen bg-gray-50">
       <TopBanner /><Navbar /><AuthModal />
 
-      <main className="max-w-[1200px] mx-auto px-4 py-6">
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-          <Link to="/" className="hover:text-green-700">Home</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-gray-800 font-medium">Testimoni</span>
-        </nav>
-
-        <div className="text-center mb-10">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Testimoni Pelanggan</h1>
-          <p className="text-gray-500 max-w-xl mx-auto">Dengarkan pengalaman para petani yang telah menggunakan produk-produk berkualitas dari Trubus.</p>
+      <main className="w-full mx-auto px-4 md:px-8 lg:px-12 py-10">
+        <div className="mb-12">
+          <div className="inline-flex items-center gap-2 text-green-600 font-semibold tracking-wider uppercase text-sm mb-3">
+            <span className="w-8 h-0.5 bg-green-600 rounded-full"></span>
+            Suara Pelanggan
+          </div>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 leading-tight">Testimoni Pelanggan</h1>
+          <p className="text-gray-500 text-base md:text-lg max-w-2xl">
+            Dengarkan pengalaman para petani yang telah menggunakan produk-produk berkualitas dari Trubus.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-100 p-6 hover:shadow-lg transition-shadow relative">
+            <div key={i} className="bg-white rounded-3xl border border-gray-100 p-6 hover:shadow-lg transition-all duration-300 relative">
               <Quote className="w-8 h-8 text-green-100 absolute top-4 right-4" />
               <div className="flex items-center gap-3 mb-4">
                 <img src={t.image} alt={t.name} className="w-14 h-14 rounded-full object-cover border-2 border-green-100" />

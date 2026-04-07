@@ -6,32 +6,16 @@ import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from 'luci
 
 const Footer: React.FC = () => {
   const [collections, setCollections] = useState<any[]>([]);
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     supabase.from('ecom_collections').select('id, title, handle').eq('is_visible', true).order('title')
       .then(({ data }) => { if (data) setCollections(data); });
   }, []);
 
-  const handleNewsletter = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    try {
-      await fetch('https://famous.ai/api/crm/PROJECT_ID/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'footer-signup', tags: ['newsletter', 'footer-signup'] })
-      });
-    } catch {}
-    setSubscribed(true);
-    setEmail('');
-  };
-
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-[1200px] mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
             <img
@@ -86,7 +70,7 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Kontak & Forum */}
+          {/* Kontak */}
           <div>
             <h4 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">Kontak</h4>
             <ul className="space-y-3">
@@ -103,35 +87,6 @@ const Footer: React.FC = () => {
                 <span>redaksi@trubus.id</span>
               </li>
             </ul>
-            <h4 className="text-white font-semibold text-sm uppercase tracking-wider mt-6 mb-3">Forum</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-400 hover:text-green-400">Diskusi Pertanian</a></li>
-              <li><a href="#" className="text-sm text-gray-400 hover:text-green-400">Tanya Jawab Ahli</a></li>
-              <li><a href="#" className="text-sm text-gray-400 hover:text-green-400">Komunitas Petani</a></li>
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h4 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">Newsletter</h4>
-            <p className="text-sm text-gray-400 mb-3">Dapatkan update artikel dan promo terbaru langsung di inbox Anda.</p>
-            {subscribed ? (
-              <p className="text-green-400 text-sm font-medium">Terima kasih telah berlangganan!</p>
-            ) : (
-              <form onSubmit={handleNewsletter} className="flex flex-col gap-2">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="Email Anda"
-                  className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
-                <button type="submit" className="px-4 py-2 bg-green-700 text-white text-sm font-medium rounded-md hover:bg-green-600 transition-colors">
-                  Berlangganan
-                </button>
-              </form>
-            )}
           </div>
         </div>
 

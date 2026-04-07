@@ -11,7 +11,7 @@ interface ArticleCardProps {
 const ArticleCard: React.FC<ArticleCardProps> = ({ article, variant = 'default' }) => {
   if (variant === 'featured') {
     return (
-      <Link to={`/artikel/${article.slug}`} className="group relative block h-full min-h-[420px] overflow-hidden">
+      <Link to={`/artikel/${article.slug}`} className="group relative block h-full min-h-[420px] overflow-hidden rounded-3xl">
         <div className="absolute inset-0 overflow-hidden">
           <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         </div>
@@ -37,7 +37,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, variant = 'default' 
   if (variant === 'horizontal') {
     return (
       <Link to={`/artikel/${article.slug}`} className="group flex gap-4 py-3 border-b border-gray-100 last:border-0">
-        <img src={article.image} alt={article.title} className="w-28 h-20 object-cover flex-shrink-0" />
+        <img src={article.image} alt={article.title} className="w-28 h-20 object-cover flex-shrink-0 rounded-xl" />
         <div className="min-w-0">
           <span className="text-[10px] font-bold text-green-700 uppercase">{article.category}</span>
           <h3 className="text-sm font-semibold text-gray-800 group-hover:text-green-700 line-clamp-2 transition-colors leading-snug mt-0.5">
@@ -65,11 +65,11 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, variant = 'default' 
   }
 
   return (
-    <Link to={`/artikel/${article.slug}`} className="group bg-white overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
+    <Link to={`/artikel/${article.slug}`} className="group bg-white overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 rounded-3xl">
       <div className="aspect-[16/10] overflow-hidden">
         <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
       </div>
-      <div className="p-4">
+      <div className="p-5">
         <span className="text-[10px] font-bold text-green-700 uppercase">{article.category}</span>
         <h3 className="text-base font-semibold text-gray-800 group-hover:text-green-700 line-clamp-2 transition-colors leading-snug mt-1 mb-2">
           {article.title}

@@ -92,8 +92,19 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground font-sans dark:bg-background dark:text-foreground;
+    padding-top: 64px; /* offset for fixed navbar (h-16) */
+  }
+
+  @media (min-width: 1024px) {
+    body {
+      padding-top: 80px; /* offset for fixed navbar (lg:h-20) */
+    }
   }
 
   pre, code {

@@ -33,7 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact }) => {
   }
 
   return (
-    <Link to={`/produk/${product.handle}`} className="group bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
+    <Link to={`/produk/${product.handle}`} className="group bg-white rounded-3xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300">
       <div className="relative aspect-square overflow-hidden bg-gray-50">
         <img
           src={product.images?.[0]}
@@ -51,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact }) => {
           </div>
         )}
       </div>
-      <div className="p-3">
+      <div className="p-5">
         <div className="flex items-center gap-1 mb-1">
           <Tag className="w-3 h-3 text-gray-400" />
           <span className="text-[11px] text-gray-400 uppercase">{product.product_type}</span>

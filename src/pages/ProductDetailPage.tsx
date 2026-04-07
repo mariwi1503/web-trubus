@@ -212,43 +212,44 @@ export default function ProductDetailPage() {
                 <span className="text-xs text-gray-400">Transaksi diarahkan ke platform eksternal</span>
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
-                {ctaLinks.map(link => (
-                  <a
-                    key={link.key}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
-                      link.kind === 'consultation'
-                        ? 'border border-green-200 bg-white text-green-800 hover:bg-green-50'
-                        : 'bg-green-700 text-white hover:bg-green-600'
-                    }`}
-                  >
-                    {link.label}
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                ))}
+                {ctaLinks.map(link => {
+                  if (link.key === 'tokopedia') {
+                    return (
+                      <a key={link.key} href={link.href} target="_blank" rel="noopener noreferrer" className="overflow-hidden rounded-xl border border-gray-200 hover:shadow-md hover:border-green-400 transition-all flex items-center justify-center bg-white py-2 px-4 group">
+                        <img src="/icons/tokopedia.png" alt="Beli di Tokopedia" className="h-8 md:h-10 w-auto object-contain group-hover:scale-105 transition-transform" />
+                      </a>
+                    );
+                  }
+                  if (link.key === 'shopee') {
+                    return (
+                      <a key={link.key} href={link.href} target="_blank" rel="noopener noreferrer" className="overflow-hidden rounded-xl border border-gray-200 hover:shadow-md hover:border-orange-400 transition-all flex items-center justify-center bg-white py-2 px-4 group">
+                        <img src="/icons/shopee.png" alt="Beli di Shopee" className="h-8 md:h-10 w-auto object-contain group-hover:scale-105 transition-transform" />
+                      </a>
+                    );
+                  }
+                  return (
+                    <a
+                      key={link.key}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
+                        link.kind === 'consultation'
+                          ? 'border border-green-200 bg-white text-green-800 hover:bg-green-50'
+                          : 'bg-green-700 text-white hover:bg-green-600'
+                      }`}
+                    >
+                      {link.label}
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  );
+                })}
               </div>
               <p className="text-xs leading-relaxed text-gray-500">
                 Tip: isi `tokopedia_url`, `shopee_url`, atau `halo_trubus_url` pada metadata produk bila ingin tiap tombol menuju link produk yang spesifik.
               </p>
             </div>
 
-            {/* Features */}
-            <div className="grid grid-cols-3 gap-3 mt-6">
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <Truck className="w-5 h-5 text-green-700 mx-auto mb-1" />
-                <p className="text-[11px] text-green-800 font-medium">Gratis Ongkir</p>
-              </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <Shield className="w-5 h-5 text-green-700 mx-auto mb-1" />
-                <p className="text-[11px] text-green-800 font-medium">Garansi Asli</p>
-              </div>
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <Package className="w-5 h-5 text-green-700 mx-auto mb-1" />
-                <p className="text-[11px] text-green-800 font-medium">Packing Aman</p>
-              </div>
-            </div>
 
             {/* Metadata */}
             {product.metadata && Object.keys(product.metadata).length > 0 && (

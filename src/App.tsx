@@ -15,6 +15,8 @@ import ArticleListPage from "./pages/ArticleListPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import TestimoniPage from "./pages/TestimoniPage";
 import TentangKamiPage from "./pages/TentangKamiPage";
+import GaleriPage from "./pages/GaleriPage";
+import KarirPage from "./pages/KarirPage";
 import SearchPage from "./pages/SearchPage";
 import NotFound from "./pages/NotFound";
 
@@ -53,6 +55,8 @@ const App = () => (
                 <Route path="/artikel/:slug" element={<ArticleDetailPage />} />
                 <Route path="/testimoni" element={<TestimoniPage />} />
                 <Route path="/tentang-kami" element={<TentangKamiPage />} />
+                <Route path="/galeri" element={<GaleriPage />} />
+                <Route path="/karir" element={<KarirPage />} />
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
