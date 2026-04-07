@@ -308,7 +308,7 @@ const AppLayout: React.FC = () => {
 
         {/* Highlight Gallery Section */}
         <section className="mb-16">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
               <div className="inline-flex items-center gap-2 text-green-600 font-semibold tracking-wider uppercase text-sm mb-3">
                 <span className="w-8 h-0.5 bg-green-600 rounded-full"></span>
@@ -317,7 +317,7 @@ const AppLayout: React.FC = () => {
               <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2 leading-tight">Galeri Kegiatan</h2>
               <p className="text-gray-600 text-sm md:text-base">Potret dedikasi kami dalam memajukan agrikultur Indonesia.</p>
             </div>
-            <Link to="/galeri" className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-semibold rounded-full hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm">
+            <Link to="/galeri" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-gray-200 text-gray-700 font-semibold rounded-full hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm self-start md:self-auto">
               Lihat Semua Galeri <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

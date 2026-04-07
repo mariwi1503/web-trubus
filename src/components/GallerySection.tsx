@@ -39,9 +39,7 @@ const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
           <div
             key={index}
             onClick={() => openLightbox(index)}
-            className={`group relative rounded-3xl overflow-hidden cursor-pointer shadow-sm h-[180px] sm:h-[220px] md:h-[300px] ${
-              index >= 2 ? 'hidden lg:block' : ''
-            }`}
+            className="group relative rounded-3xl overflow-hidden cursor-pointer shadow-sm h-[180px] sm:h-[220px] md:h-[300px]"
           >
             <img
               src={item.src}
@@ -54,17 +52,6 @@ const GallerySection: React.FC<GallerySectionProps> = ({ items }) => {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Mobile: show "Lihat Semua" hint with count */}
-      <div className="lg:hidden mt-3 text-center">
-        <button
-          onClick={() => openLightbox(0)}
-          className="inline-flex items-center gap-2 text-sm text-green-600 font-semibold"
-        >
-          <span>+{items.length - 2} foto lainnya</span>
-          <span className="text-gray-400">· Ketuk untuk melihat semua</span>
-        </button>
       </div>
 
       {/* Lightbox - Full Screen */}
