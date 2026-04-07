@@ -77,171 +77,171 @@ const Navbar: React.FC<NavbarProps> = ({ transparentOnTop = false }) => {
   return (
     <>
       <nav className={`transition-all duration-300 border-b fixed top-0 left-0 right-0 z-50 ${navBgClass}`}>
-      <div className="w-full mx-auto px-4 md:px-8 lg:px-12">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="w-full mx-auto px-4 md:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-16 lg:h-20">
 
-          {/* Left side: Logo */}
-          <Link to="/" className="flex items-center shrink-0">
-            <img
-              src="https://www.tokotrubus.com/img/logo-toko-trubus.png"
-              alt="Toko Trubus"
-              className={`h-12 md:h-12 w-auto object-contain transition-all duration-300 ${isTransparent ? 'brightness-0 invert opacity-95' : ''}`}
-            />
-          </Link>
+            {/* Left side: Logo */}
+            <Link to="/" className="flex items-center shrink-0">
+              <img
+                src="/icons/logo-toko-trubus.png"
+                alt="Toko Trubus"
+                className={`h-12 md:h-12 w-auto object-contain transition-all duration-300 ${isTransparent ? 'brightness-0 invert opacity-95' : ''}`}
+              />
+            </Link>
 
-          {/* Right side: Nav Menu & Actions */}
-          <div className="flex items-center gap-2 md:gap-6">
+            {/* Right side: Nav Menu & Actions */}
+            <div className="flex items-center gap-2 md:gap-6">
 
-            {/* Desktop Menu */}
-            <div className="hidden lg:flex items-center gap-1">
-              <Link to="/" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
-                Home
-              </Link>
+              {/* Desktop Menu */}
+              <div className="hidden lg:flex items-center gap-1">
+                <Link to="/" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
+                  Home
+                </Link>
 
-              {/* Artikel dropdown */}
-              <div ref={artikelRef} className="relative">
-                <button
-                  onClick={() => { setArtikelOpen(!artikelOpen); setProdukOpen(false); }}
-                  className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}
-                >
-                  Artikel <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-                {artikelOpen && (
-                  <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 py-2 min-w-[200px] z-50 text-left">
-                    <Link to="/artikel" onClick={() => setArtikelOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 font-medium">
-                      Semua Artikel
-                    </Link>
-                    <div className="border-t border-gray-100 my-1" />
-                    {articleCategories.map(cat => (
-                      <Link
-                        key={cat.slug}
-                        to={`/artikel/kategori/${cat.slug}`}
-                        onClick={() => setArtikelOpen(false)}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-green-700"
-                      >
-                        {cat.name}
+                {/* Artikel dropdown */}
+                <div ref={artikelRef} className="relative">
+                  <button
+                    onClick={() => { setArtikelOpen(!artikelOpen); setProdukOpen(false); }}
+                    className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}
+                  >
+                    Artikel <ChevronDown className="w-3.5 h-3.5" />
+                  </button>
+                  {artikelOpen && (
+                    <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 py-2 min-w-[200px] z-50 text-left">
+                      <Link to="/artikel" onClick={() => setArtikelOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 font-medium">
+                        Semua Artikel
                       </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+                      <div className="border-t border-gray-100 my-1" />
+                      {articleCategories.map(cat => (
+                        <Link
+                          key={cat.slug}
+                          to={`/artikel/kategori/${cat.slug}`}
+                          onClick={() => setArtikelOpen(false)}
+                          className="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-green-700"
+                        >
+                          {cat.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
-              {/* Produk dropdown */}
-              <div ref={produkRef} className="relative">
-                <button
-                  onClick={() => { setProdukOpen(!produkOpen); setArtikelOpen(false); }}
-                  className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}
-                >
-                  Produk <ChevronDown className="w-3.5 h-3.5" />
-                </button>
-                {produkOpen && (
-                  <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 py-2 min-w-[200px] z-50 text-left">
-                    <Link to="/produk" onClick={() => setProdukOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 font-medium">
-                      Semua Produk
-                    </Link>
-                    <div className="border-t border-gray-100 my-1" />
-                    {collections.map(col => (
-                      <Link
-                        key={col.id}
-                        to={`/collections/${col.handle}`}
-                        onClick={() => setProdukOpen(false)}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-green-700"
-                      >
-                        {col.title}
+                {/* Produk dropdown */}
+                <div ref={produkRef} className="relative">
+                  <button
+                    onClick={() => { setProdukOpen(!produkOpen); setArtikelOpen(false); }}
+                    className={`flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}
+                  >
+                    Produk <ChevronDown className="w-3.5 h-3.5" />
+                  </button>
+                  {produkOpen && (
+                    <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-100 py-2 min-w-[200px] z-50 text-left">
+                      <Link to="/produk" onClick={() => setProdukOpen(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 font-medium">
+                        Semua Produk
                       </Link>
-                    ))}
-                  </div>
-                )}
+                      <div className="border-t border-gray-100 my-1" />
+                      {collections.map(col => (
+                        <Link
+                          key={col.id}
+                          to={`/collections/${col.handle}`}
+                          onClick={() => setProdukOpen(false)}
+                          className="block px-4 py-2 text-sm text-gray-600 hover:bg-green-50 hover:text-green-700"
+                        >
+                          {col.title}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <Link to="/testimoni" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
+                  Testimoni
+                </Link>
+                <Link to="/galeri" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
+                  Galeri
+                </Link>
+                <Link to="/tentang-kami" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
+                  Tentang Kami
+                </Link>
+                <Link to="/karir" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
+                  Karir
+                </Link>
               </div>
 
-              <Link to="/testimoni" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
-                Testimoni
-              </Link>
-              <Link to="/galeri" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
-                Galeri
-              </Link>
-              <Link to="/tentang-kami" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
-                Tentang Kami
-              </Link>
-              <Link to="/karir" className={`px-3 py-2 text-sm font-semibold transition-colors ${textClass}`}>
-                Karir
-              </Link>
-            </div>
+              {/* Actions: Search & CTA */}
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <button onClick={() => setSearchOpen(!searchOpen)} className={`p-2 rounded-full transition-colors ${textClass} hover:bg-black/5`}>
+                    <Search className="w-5 h-5" />
+                  </button>
+                  {searchOpen && (
+                    <form onSubmit={handleSearch} className="absolute right-0 top-full mt-2 bg-white shadow-xl rounded-lg border p-2 z-50 w-72">
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        placeholder="Cari artikel atau produk..."
+                        className="w-full px-3 py-2 border rounded-md text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        autoFocus
+                      />
+                    </form>
+                  )}
+                </div>
 
-            {/* Actions: Search & CTA */}
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <button onClick={() => setSearchOpen(!searchOpen)} className={`p-2 rounded-full transition-colors ${textClass} hover:bg-black/5`}>
-                  <Search className="w-5 h-5" />
+                {/* Collaboration / Mitra CTA */}
+                <button
+                  type="button"
+                  onClick={() => setMitraOpen(true)}
+                  className="hidden lg:inline-flex px-5 py-2 text-sm font-bold rounded-full transition-colors whitespace-nowrap shadow-sm bg-green-600 text-white hover:bg-green-500"
+                >
+                  Bergabung Menjadi Mitra
                 </button>
-                {searchOpen && (
-                  <form onSubmit={handleSearch} className="absolute right-0 top-full mt-2 bg-white shadow-xl rounded-lg border p-2 z-50 w-72">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={e => setSearchQuery(e.target.value)}
-                      placeholder="Cari artikel atau produk..."
-                      className="w-full px-3 py-2 border rounded-md text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
-                      autoFocus
-                    />
-                  </form>
-                )}
+
+                {/* Mobile hamburger */}
+                <button className={`lg:hidden p-2 transition-colors ${textClass}`} onClick={() => setMobileOpen(!mobileOpen)}>
+                  {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </button>
               </div>
-
-              {/* Collaboration / Mitra CTA */}
-              <button
-                type="button"
-                onClick={() => setMitraOpen(true)}
-                className="hidden lg:inline-flex px-5 py-2 text-sm font-bold rounded-full transition-colors whitespace-nowrap shadow-sm bg-green-600 text-white hover:bg-green-500"
-              >
-                Bergabung Menjadi Mitra
-              </button>
-
-              {/* Mobile hamburger */}
-              <button className={`lg:hidden p-2 transition-colors ${textClass}`} onClick={() => setMobileOpen(!mobileOpen)}>
-                {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 py-2">
-          <Link to="/" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Home</Link>
-          <div className="px-4 py-2">
-            <p className="text-xs font-bold text-gray-400 uppercase mb-1">Artikel</p>
-            {articleCategories.map(cat => (
-              <Link key={cat.slug} to={`/artikel/kategori/${cat.slug}`} onClick={() => setMobileOpen(false)} className="block py-1.5 text-sm text-gray-600">
-                {cat.name}
-              </Link>
-            ))}
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 py-2">
+            <Link to="/" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Home</Link>
+            <div className="px-4 py-2">
+              <p className="text-xs font-bold text-gray-400 uppercase mb-1">Artikel</p>
+              {articleCategories.map(cat => (
+                <Link key={cat.slug} to={`/artikel/kategori/${cat.slug}`} onClick={() => setMobileOpen(false)} className="block py-1.5 text-sm text-gray-600">
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+            <div className="px-4 py-2 border-t border-gray-100">
+              <p className="text-xs font-bold text-gray-400 uppercase mb-1">Produk</p>
+              {collections.map(col => (
+                <Link key={col.id} to={`/collections/${col.handle}`} onClick={() => setMobileOpen(false)} className="block py-1.5 text-sm text-gray-600">
+                  {col.title}
+                </Link>
+              ))}
+            </div>
+            <Link to="/testimoni" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800 border-t border-gray-100">Testimoni</Link>
+            <Link to="/galeri" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Galeri</Link>
+            <Link to="/tentang-kami" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Tentang Kami</Link>
+            <Link to="/karir" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Karir</Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                setMitraOpen(true);
+              }}
+              className="block mx-4 mt-2 px-4 py-3 text-center text-sm font-bold rounded-full transition-colors shadow-sm bg-green-600 text-white hover:bg-green-500"
+            >
+              Bergabung Menjadi Mitra
+            </button>
           </div>
-          <div className="px-4 py-2 border-t border-gray-100">
-            <p className="text-xs font-bold text-gray-400 uppercase mb-1">Produk</p>
-            {collections.map(col => (
-              <Link key={col.id} to={`/collections/${col.handle}`} onClick={() => setMobileOpen(false)} className="block py-1.5 text-sm text-gray-600">
-                {col.title}
-              </Link>
-            ))}
-          </div>
-          <Link to="/testimoni" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800 border-t border-gray-100">Testimoni</Link>
-          <Link to="/galeri" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Galeri</Link>
-          <Link to="/tentang-kami" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Tentang Kami</Link>
-          <Link to="/karir" onClick={() => setMobileOpen(false)} className="block px-4 py-2 text-sm font-semibold text-gray-800">Karir</Link>
-          <button
-            type="button"
-            onClick={() => {
-              setMobileOpen(false);
-              setMitraOpen(true);
-            }}
-            className="block mx-4 mt-2 px-4 py-3 text-center text-sm font-bold rounded-full transition-colors shadow-sm bg-green-600 text-white hover:bg-green-500"
-          >
-            Bergabung Menjadi Mitra
-          </button>
-        </div>
-      )}
+        )}
       </nav>
 
       <Dialog open={mitraOpen} onOpenChange={setMitraOpen}>
